@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports: ["80:5000"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./user_data:/app/user_data
+    environment:
+      - OPENAI_API_KEY=sk-xxxx
