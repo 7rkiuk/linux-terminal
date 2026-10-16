@@ -1,0 +1,6 @@
+FROM python:3.9-slim
+RUN apt-get update && apt-get install -y docker.io
+WORKDIR /app
+COPY . .
+RUN pip install flask flask-socketio docker openai
+CMD ["python", "app.py"]
