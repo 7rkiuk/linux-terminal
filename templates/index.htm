@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
+    <style>body{background:#111; color:#fff;}</style>
+</head>
+<body>
+    <div id="terminal"></div>
+    <script>
+        const term = new Terminal({cursorBlink: true});
+        term.open(document.getElementById('terminal'));
+        const socket = io();
+        let buf = "";
+        term.on('data', k => {
+            if (k === '\r') { socket.emit('cmd', {command: buf}); buf = ""; term.write('\r\n'); }
+            else if (k === '\u007f') { buf = buf.slice(0,-1); term.write('\b \b'); }
+            else { buf += k; term.write(k); }
+        });
+        socket.on('output', d => term.write(d.text + '\r\n$ '));
+    </script>
+</body>
+</html>
